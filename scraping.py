@@ -49,7 +49,7 @@ def scrape(url, page_count):
 
     print("Number of opportunities: ", len(all_opportunities))
 
-    return all_opportunities
+    return all_opportunities, all_opportunities_plus_additional_info
 
 def find_column_names(all_opportunities):
     '''
@@ -97,7 +97,7 @@ def make_df(all_opportunities, columns):
 
     return df
 
-def store_data(data, all_opportunities):
+def store_data(data, all_opportunities_plus_additional_info):
     '''
     This function stores the data in the df in three different formats, json, pickle and csv
     :param data: the df
@@ -110,7 +110,7 @@ def store_data(data, all_opportunities):
     for el in files:
         with open(el, "wb") as outfile:
             if el == "all_opp_list.pkl":
-                pickle.dump(all_opportunities, outfile)
+                pickle.dump(all_opportunities_plus_additional_info, outfile)
             else:
                 pickle.dump(data, outfile)
 
@@ -129,13 +129,13 @@ def main():
 
     page_count = get_page_count(url)
 
-    all_opportunities = scrape(url_scrape, page_count)
+    all_opportunities, all_opportunities_plus_additional_info = scrape(url_scrape, page_count)
 
     columns = find_column_names(all_opportunities)
 
     df = make_df(all_opportunities, columns)
 
-    store_data(df, all_opportunities)
+    store_data(df, all_opportunities_plus_additional_info)
 
 if __name__ == "__main__":
     main()
