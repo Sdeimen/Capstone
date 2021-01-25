@@ -11,6 +11,7 @@ import requests
 import json
 import pandas as pd
 import pickle
+import os
 
 def get_page_count(url):
     '''
@@ -95,6 +96,9 @@ def make_df(all_opportunities, columns):
     df = df.drop(["program"], axis=1)
     df["program"] = program_collection
 
+    # re-index to start from 1
+    df.index = df.index = range(1,len(df) +1)
+
     return df
 
 def store_data(data, all_opportunities_plus_additional_info):
@@ -105,6 +109,11 @@ def store_data(data, all_opportunities_plus_additional_info):
     :return: None
     '''
 
+    # create 'data' directory, if it does not already exists
+    if "data" not in os.listdir():
+        os.mkdir("data")
+    # change to working directory "data"
+    os.chdir("data")
     # store the all_opportunities LIST and the df as pickle file:
     files = ["all_opp_list.pkl", "all_opportunities_df.pkl"]
     for el in files:
@@ -117,7 +126,7 @@ def store_data(data, all_opportunities_plus_additional_info):
     # store data as json
     data.to_json(r'all_opportunities_df.json')
     # store data as csv
-    data.to_csv("data/all_opportunities_df.csv")
+    data.to_csv("all_opportunities_df.csv")
 
 
 
