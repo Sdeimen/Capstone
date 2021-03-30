@@ -92,12 +92,12 @@ def make_df(all_opportunities, columns):
             else:
                 program_collection.append(all_opportunities[o]["program"])
 
-    # bring back the "program" column by adding it to the df. For some reason it throws an error if I do it in the loop...
+    # bring back the "program" column by adding it to the df. For some reason it throws an error if done in the loop...
     df = df.drop(["program"], axis=1)
     df["program"] = program_collection
 
     # re-index to start from 1
-    df.index = df.index = range(1,len(df) +1)
+    df.index = range(1,len(df) +1)
 
     return df
 

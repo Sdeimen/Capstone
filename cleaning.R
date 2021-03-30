@@ -3,10 +3,11 @@
 # STEM opportunities in the US
 # University of Arizona - Spring 2021
 #
-#
+# Purpose: Getting data and clean it
+
+
 # loading packages
 library(tidyverse)
-library(dplyr)
 
 # data cleaning and attribute selection ---- 
 
@@ -42,4 +43,5 @@ glimpse(opps)
 summary(opps)
 View(opps)
 # Next step: inspecting each attribute and decide how to take car of missing values and so forth ----
-# Summmary showed a couple of double appearances of "titles" - after closer inspection it is the same opportunity but with different dates
+str(opps)
+
