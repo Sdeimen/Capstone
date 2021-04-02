@@ -79,14 +79,17 @@ def make_df(all_opportunities, columns):
     '''
     # make a df with the keys as column names and index as long as the all_opportunities list is
     df = pd.DataFrame(None, columns=columns, index=range(len(all_opportunities)))
-
+    
     # fill the df with data and store the "program" dicts in a separated list
     program_collection = []
-    for o in range(len(all_opportunities)):  # o is the all_opportunities-loop, going from 0 to 647 (648 entries, as of January 8th 2021)
+    for o in range(len(all_opportunities)):  # o is the all_opportunities-loop, going from 0 to 842 (843 entries, as of April 1st 2021)
         for d in range(len(df.columns)):  # d is the df-loop from 0 to 44
             if df.columns[d] != "program":
                 if df.columns[d] in all_opportunities[o]:
-                    df.loc[o, df.columns[d]] = all_opportunities[o][df.columns[d]]
+                    if type(all_opportunities[o][df.columns[d]]) == list: # strip the strings
+                        df.loc[o, df.columns[d]] = [el.strip() if type(el) == str else el for el in all_opportunities[o][df.columns[d]]]
+                    else:
+                        df.loc[o, df.columns[d]] = all_opportunities[o][df.columns[d]]
                 else:
                     df.loc[o, df.columns[d]] = None
             else:
