@@ -138,7 +138,7 @@ base_plots <- function(state)  {
   zoom_state
   # zoom in a bit - longs and lats are too specific to use in a function
   # zoom_state + coord_fixed(xlim =  c(-80, -77),  ylim = c(35, 36), ratio = 1.3)
-  
+  return(c(gg_color, zoom_state))
   }
 
 

@@ -25,7 +25,7 @@ colnames(opps_total)
 write.csv(colnames(opps_total),"colnames_opps_total.csv", row.names = FALSE)
 
 # selecting columns - not keeping affiliations for now -> talk about it in the report
-opps <- select(opps_total, title, description, fromDate, toDate, cost, costInt, ages, reach, scholarship, attention, language, locationCity, locationState, locationPostalCode, locationLatitude, locationLongitude, areaOfInterest, typeOfOpportunity, programStatus,excerpt)
+opps <- select(opps_total, title, description, fromDate, toDate, cost, ages, reach, scholarship, attention, language, locationCity, locationState, locationPostalCode, locationLatitude, locationLongitude, areaOfInterest, typeOfOpportunity, programStatus,excerpt)
 
 # check 
 colnames(opps)
@@ -44,4 +44,5 @@ summary(opps)
 View(opps)
 # Next step: inspecting each attribute and decide how to take car of missing values and so forth ----
 str(opps)
+
 

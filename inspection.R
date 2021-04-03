@@ -19,15 +19,10 @@ glimpse(opps_inspect)
 
 # checking for incomplete cases
 nrow(filter(opps_inspect, !complete.cases(opps_inspect)))
-# it looks like 11 cases are incomplete
+# it looks like 2 cases are incomplete
 filter(opps_inspect, !complete.cases(opps_inspect))
 # and those seems to have missing Longs and Lats, which is not super important, so I will keep those
 # There are a couple of other missing data, such as "attention", but for now I will keep those as well
-
-
-# Summmary showed a couple of double appearances of "titles" - after closer inspection those are the same opportunity but with different dates, different locations or different areas of interest
-opps[296,] == opps[319,] # Title: Brick Flicks (Ages 9-13) - Northville, MI
-opps[243,] == opps[261,] # Title: Chowdhury STEM Innovation Contest
 
 
 # adding a duration column ----
@@ -63,7 +58,7 @@ ggplot(opps_inspect_cost_ordered, aes(cost, fill = cost)) +
   theme(legend.position = "none", axis.text.x = element_text(angle = 90))
 
 # see if costs and scholarship are somehow related
-opps_inspect_cost_ordered$cost <-  combineLevels(opps_inspect_cost_ordered$cost, c("","False"), newLabel = "False")
+
 opps_inspect_cost_ordered$scholarship <-  combineLevels(opps_inspect_cost_ordered$scholarship, c("","False"), newLabel = "False")
 cost_scholars <- select(opps_inspect_cost_ordered, cost, scholarship)
 table(cost_scholars)
