@@ -12,8 +12,8 @@ library(tidyverse)
 # data cleaning and attribute selection ---- 
 
 # bring in the data
-opps_total <- read.csv("data/all_opportunities_df.csv")
-
+opps_total <- read.csv("data/all_opportunities_df_cleaned.csv")
+opps_total <- select(opps_total, -c(X, Ages_))
 # check if it is a data frame 
 is.data.frame(opps_total)
 
@@ -25,24 +25,28 @@ colnames(opps_total)
 write.csv(colnames(opps_total),"colnames_opps_total.csv", row.names = FALSE)
 
 # selecting columns - not keeping affiliations for now -> talk about it in the report
-opps <- select(opps_total, title, description, fromDate, toDate, cost, ages, reach, scholarship, attention, language, locationCity, locationState, locationPostalCode, locationLatitude, locationLongitude, areaOfInterest, typeOfOpportunity, programStatus,excerpt)
+opps <- select(opps_total, title, description, fromDate, toDate, cost, ages, reach, scholarship, attention, language, locationCity, locationState, locationPostalCode, locationLatitude, locationLongitude, areaOfInterest, typeOfOpportunity, excerpt)
 
+opps_for_ohe <- select(opps_total, title, description, fromDate, toDate, cost, reach, scholarship, locationCity, locationState, locationPostalCode, locationLatitude, locationLongitude, typeOfOpportunity, excerpt, contains(c("Ages_","Att_","L_","AoI_")))
+  
+  
 # check 
 colnames(opps)
 
 # removing duplicated items and adding the OpportunityID column
 opps <- distinct(opps)
+opps_for_ohe <- distinct(opps_for_ohe)
 opps <- tibble::rowid_to_column(opps, "OpportunityID")
+opps_for_ohe <- tibble::rowid_to_column(opps_for_ohe, "OpportunityID")
 glimpse(opps)
+glimpse(opps_for_ohe)
 
 # Save opps_total and opps ----
-save(opps_total, opps, file = "data/opps.RData")
+save(opps_total, opps, opps_for_ohe, file = "data/opps.RData")
 # To load the data again and check
 load("data/opps.RData")
 glimpse(opps)
 summary(opps)
 View(opps)
-# Next step: inspecting each attribute and decide how to take car of missing values and so forth ----
-str(opps)
 
 
