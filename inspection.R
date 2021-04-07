@@ -140,7 +140,48 @@ ggplot(enroll_distr, aes(enroll_groups, enroll_numbers, fill=enroll_groups)) +
   theme(legend.position = "none", axis.text.x = element_text(angle = 270))
 
 
+# Attention - this is the audience ----
 
+opps_inspect_att <- select(opps_for_ohe, contains("Att_")) %>% select(-Att_None)
+opps_inspect_att
 
+# GTS : gifted and talented studends
+# SRDos: Students with Risk of dropping out of school
+# SwDis: Students with disabilities 
 
+# built a count
+opps_inspect_att <- rbind(opps_inspect_att, colSums(opps_inspect_att))
+opps_inspect_att[842,]
+
+plot_opps_att <- gather(opps_inspect_att[842,], key=audience, value=counts)
+
+ggplot(plot_opps_att, aes(audience, counts, fill=audience)) +
+  geom_bar(stat = "identity") +
+  theme_classic() +
+  theme(legend.position = "none", axis.text.x = element_text(angle = 270))
+
+# This is interesting, it looks like boys and girls are equally likely, but the GTS do get way more attention than underrepresentad like Students with risk droping out of school or with disabilities
+
+# Area of Interest ----
+
+opps_inspect_aoi <- select(opps_for_ohe, contains("AoI_"))
+opps_inspect_aoi
+
+# built a count
+opps_inspect_aoi <- rbind(opps_inspect_aoi, colSums(opps_inspect_aoi))
+opps_inspect_aoi[842,]
+
+plot_opps_aoi <- gather(opps_inspect_aoi[842,], key=areaofinterest, value=counts)
+
+ggplot(plot_opps_aoi, aes(areaofinterest, counts, fill=areaofinterest)) +
+  geom_bar(stat = "identity") +
+  theme_classic() +
+  theme(legend.position = "none", axis.text=element_text(size=10), axis.text.x = element_text(angle = 270))
+
+cs <- opps_inspect_aoi$AoI_CS
+cp <- opps_inspect_aoi$AoI_Coding.Programming
+
+# checking if Computer Science and Coding.Programming are the same, because the counts look like
+opps_inspect_aoi[opps_inspect_aoi$AoI_CS != opps_inspect_aoi$AoI_Coding.Programming,]
+# but they are not
 
