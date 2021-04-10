@@ -35,8 +35,10 @@ ggusa <- ggplot() +
 ggusa +
   geom_point(data= opps_inspect, aes(x = locationLongitude, y = locationLatitude), color = "red", size = 1)
 
-# opportunity 18 based in Stockholm, remove, the other two outliers are Honululu and San Jose
-opps_inspect <- opps_inspect[-c(18),]
+
+
+# opportunity 18 based in Stockholm, remove, 
+opps_inspect <- opps_inspect[-c(filter(opps_inspect, locationLongitude > 0)[1,1]),]
 
 # plot with State boundaries
 ggstates <- ggplot() + 
@@ -44,14 +46,26 @@ ggstates <- ggplot() +
   coord_fixed(1.3) +
   guides(fill=FALSE)  # do this to leave off the color legend
 ggstates + 
-  geom_point(data= opps_inspect, aes(x = locationLongitude, y = locationLatitude), color = "red", size = 1)
+  geom_point(data= opps_inspect, aes(x = locationLongitude, y = locationLatitude), color = "red", size = 1) 
+
+# the other two outliers are Honululu and San Jose, but not removing them, jsut zooming in:
+# Final US map:
+
+ggstates <- ggplot() + 
+  geom_polygon(data = states, aes(x = long, y = lat, fill = region, group = group), color = "white") + 
+  coord_fixed(1.3) +
+  guides(fill=FALSE)  # do this to leave off the color legend
+ggstates + 
+  geom_point(data= opps_inspect, aes(x = locationLongitude, y = locationLatitude), color = "red", size = 1) +
+  coord_fixed(xlim = c(-124, -69),  ylim = c(25, 49), ratio = 1.3)
 
 
 # possibility to zoom in on US mape
-zoom_us <- ggstates + 
-  geom_point(data= opps_inspect, aes(x = locationLongitude, y = locationLatitude), color = "royalblue1", size = 2,inherit.aes = FALSE)
-zoom_us
-zoom_us + coord_fixed(xlim = c(-83, -68),  ylim = c(33, 46), ratio = 1.3)
+  ggstates + 
+  geom_point(data= opps_inspect, aes(x = locationLongitude, y = locationLatitude), color = "red", size = 2,inherit.aes = FALSE) +
+  coord_fixed(xlim = c(-83, -68),  ylim = c(33, 46), ratio = 1.3)
+
+
 
 
 # zoom in to a couple of states
@@ -120,11 +134,11 @@ base_plots <- function(state)  {
   ggstate <- ggplot() +
     geom_polygon(data = base, aes(x=long, y=lat, group = group), fill = "purple", color="black") + 
     coord_fixed(1.3)
-  # filter opps in Ohio
+  # filter opps in the State
   opps_state <- filter(opps_inspect, locationState == str_to_title(state))
-  gg_color <- ggstate + 
-                geom_point(data= opps_state, aes(x = locationLongitude, y = locationLatitude), color = "orange", size = 2)
-  gg_color
+  ggstate + 
+    geom_point(data= opps_state, aes(x = locationLongitude, y = locationLatitude), color = "orange", size = 2)
+  
   
   # get the counties
   
@@ -133,12 +147,12 @@ base_plots <- function(state)  {
     coord_fixed(1.3) + 
     geom_polygon(color = "black", fill = "gray")
   
-  zoom_state <- ggstate_county + 
+  ggstate_county + 
     geom_point(data= opps_state, aes(x = locationLongitude, y = locationLatitude), color = "royalblue1", size = 2,inherit.aes = FALSE)
-  zoom_state
+  
   # zoom in a bit - longs and lats are too specific to use in a function
   # zoom_state + coord_fixed(xlim =  c(-80, -77),  ylim = c(35, 36), ratio = 1.3)
-  return(c(gg_color, zoom_state))
+ 
   }
-
+base_plots("ohio")
 

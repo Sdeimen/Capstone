@@ -108,7 +108,7 @@ opps_inspect_ages <- rbind(opps_inspect_ages, colSums(opps_inspect_ages))
 
 
 # pivot longer
-plot_opps_ages <- opps_inspect_ages[842,] %>% pivot_longer(cols=c("Ages_All.Ages","Ages_Pre.K", "Ages_Elementary..K.3.","Ages_Elementary..4.6.","Ages_Grades.4.9","Ages_Middle.School","Ages_High.School","Ages_Post.Secondary" ),
+plot_opps_ages <- opps_inspect_ages[842,] %>% pivot_longer(cols=c("Ages_All.Ages","Ages_Pre.K", "Ages_Elementary..K.3.","Ages_Elementary..4.6.","Ages_Middle.School","Ages_High.School","Ages_Post.Secondary" ),
                                                 names_to = "layer", values_to ="item")
 
 # versus gather 
@@ -117,10 +117,6 @@ plot_opps_ages <- gather(opps_inspect_ages[842,], key=Age_Groups, value=counts)
 plot_opps_ages_sort <- plot_opps_ages[c(1,8,3,2,4,6,5,7),]
 rownames(plot_opps_ages_sort) <- 1:nrow(plot_opps_ages_sort)
 
-plot_opps_ages_sort <- plot_opps_ages_sort[-5,]
-# delete Elementary 4,9 which looks like a typo and add one to elementary 4,6
-rownames(plot_opps_ages_sort) <- 1:nrow(plot_opps_ages_sort)
-plot_opps_ages_sort[4,2] <- 458
 
 
 ggplot(plot_opps_ages_sort, aes(Age_Groups, counts, fill=Age_Groups)) +
@@ -153,6 +149,7 @@ opps_inspect_att
 opps_inspect_att <- rbind(opps_inspect_att, colSums(opps_inspect_att))
 opps_inspect_att[842,]
 
+# add the sum row
 plot_opps_att <- gather(opps_inspect_att[842,], key=audience, value=counts)
 
 ggplot(plot_opps_att, aes(audience, counts, fill=audience)) +
@@ -185,3 +182,4 @@ cp <- opps_inspect_aoi$AoI_Coding.Programming
 opps_inspect_aoi[opps_inspect_aoi$AoI_CS != opps_inspect_aoi$AoI_Coding.Programming,]
 # but they are not
 
+glimpse(opps_inspect)

@@ -13,7 +13,7 @@ library(tidyverse)
 
 # bring in the data
 opps_total <- read.csv("data/all_opportunities_df_cleaned.csv")
-opps_total <- select(opps_total, -c(X, Ages_))
+opps_total <- select(opps_total, -c(X))
 # check if it is a data frame 
 is.data.frame(opps_total)
 
