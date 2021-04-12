@@ -113,8 +113,12 @@ inspect(head(subset(opps_max_rules, subset=(lhs %in% "Att_SwDis=1")),n=15, by="l
 
 inspect(head(subset(opps_max_rules, subset=(rhs %in% "Att_SwDis=1")),n=15, by="lift"))
 
+# Plotting some rules
+girls_sub <-  subset(opps_max_rules, subset=(lhs %in% "Att_Girls=1" & rhs %in% aoi))
+girls_sub_no_aoi <- subset(opps_max_rules, subset=(lhs %in% "Att_Girls=1" & !(lhs %in% aoi) & rhs %in% aoi))
 
-
+plot(girls_sub, measure = "imbalance", shading="kulc", method = 'grouped')
+plot(girls_sub, measure = "confidence", shading="kulc", method = 'grouped')
 
 ############## example on how to check on rule length
 #select rules based on rule length
