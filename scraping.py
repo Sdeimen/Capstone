@@ -4,7 +4,7 @@ MS Information Capstone
 Author: Sebastian Deimen
 Project: STEM opportunities in the US
 Date: Spring 2021
-Purpose: Scraping data about STEM opportunities from website theconnectory
+Purpose: Scraping data about STEM opportunities from the website theconnectory
 '''
 
 import requests

@@ -24,6 +24,10 @@ colnames(opps_total)
 # save the colnames for commenting on attribute selection
 write.csv(colnames(opps_total),"colnames_opps_total.csv", row.names = FALSE)
 
+# checking on affiliations
+table(opps_total$affiliation)
+nrow(opps_total)
+
 # selecting columns - not keeping affiliations for now -> talk about it in the report
 opps <- select(opps_total, title, description, fromDate, toDate, cost, ages, reach, scholarship, attention, language, locationCity, locationState, locationPostalCode, locationLatitude, locationLongitude, areaOfInterest, typeOfOpportunity, excerpt)
 
@@ -43,7 +47,7 @@ glimpse(opps_for_ohe)
 
 # Save opps_total and opps ----
 save(opps_total, opps, opps_for_ohe, file = "data/opps.RData")
-# To load the data again and check
+# Load the data again and check
 load("data/opps.RData")
 glimpse(opps)
 summary(opps)

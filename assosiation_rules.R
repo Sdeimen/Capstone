@@ -3,7 +3,7 @@
 # STEM opportunities in the US
 # University of Arizona - Spring 2021
 #
-# Purpose: Finding assosiations in the data set
+# Purpose: Finding associations in the data set
 
 library(tidyverse)
 library(arules)
