@@ -356,10 +356,34 @@ opps_inspect_aoi[opps_inspect_aoi$AoI_CS != opps_inspect_aoi$AoI_Coding.Programm
 glimpse(opps_inspect)
 
 # type of opportunity ----
-ggplot(opps_inspect, aes(typeOfOpportunity, fill = typeOfOpportunity)) +
+opps_inspect$typeOfOpportunity <-  combineLevels(opps_inspect$typeOfOpportunity, c("Afterschool","Afterschool Program"), newLabel = "Afterschool")
+opps_inspect$typeOfOpportunity <- factor(opps_inspect$typeOfOpportunity, levels = c("Afterschool","Citizen Science","Community Event","Competition",
+                                         "Conference/Workshop", "Drop-in","Fair/Festival","Field Trip","In School", "Online Learning",
+                                         "Other","Overnight","Stargazing","Summer"))
+
+ggplot(opps_inspect, aes(typeOfOpportunity, fill = cost)) +
   geom_bar() +
   theme_classic() +
-  theme(legend.position = "none", axis.text=element_text(size=10), axis.text.x = element_text(angle = 270))
+  theme(axis.text=element_text(size=10), axis.text.x = element_text(angle = 270)) +
+  labs(x = "Type of Opportunity") +
+  ggtitle("Type of Opportuntiy")
 
 # try to find girls only
 
+# language
+
+opps_inspect_l <- select(opps_for_ohe, contains("L_"))
+opps_inspect_l
+
+# built a count
+opps_inspect_l <- rbind(opps_inspect_l, colSums(opps_inspect_l)) %>% select(-"L_None")
+opps_inspect_l[842,]
+
+plot_opps_l <- gather(opps_inspect_l[842,], key=Language, value=counts)
+
+ggplot(plot_opps_l, aes(Language, counts, fill=Language)) +
+  geom_bar(stat = "identity") +
+  theme_classic() +
+  theme(legend.position = "none", axis.text=element_text(size=10), axis.text.x = element_text(angle = 270)) +
+  labs(x = "Area of Interest") +
+  ggtitle("Overview of Languages")

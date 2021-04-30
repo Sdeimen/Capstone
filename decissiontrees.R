@@ -3,13 +3,13 @@
 # STEM opportunities in the US
 # University of Arizona - Spring 2021
 #
-# Purpose: Finding important variables with decission trees
+# Purpose: Finding important variables with decision trees
 library(stringr)
 library(tidyverse)
 library(rpart)
 library(DMwR2)
 library(rpart.plot)
-library(rockchalk) # for combinig levels
+library(rockchalk) # for combining levels
 library(caret) # for data partition, if needed, not sure yet
 library(randomForest)
 setwd("H:/MyDropbox/Dropbox/A_UofA/INFO 698/Capstone/")
@@ -29,9 +29,9 @@ get_score <- function(model, data){ p = predict(model, data, type="class")
 
 
 
-# The first tree first split on a first tree was on Att_None, which is not intersting and two splits on locationPostalCode, but Postalcode is a high
+# The first tree first split on a first tree was on Att_None, which is not interesting and two splits on locationPostalCode, but Postalcode is a high
 # cardinality attribute, so delete as well
-opps_tree <- opps_for_ohe[,c(-1,-2,-3,-4,-5,-6,-7,-9,-12,-13,-15,-11,-26)]
+opps_tree <- opps_for_ohe[,c(-1,-2,-3,-4,-5,-6,-7,-8,-9,-12,-13,-15,-11,-26)]
 
 # Code some of the TypeOfOpportunities, the tree seems to like them and they are hard to read -> Note: did not solve the issue, but still leave it
 opps_tree$typeOfOpportunity <-  combineLevels(opps_tree$typeOfOpportunit, c("Afterschool","Afterschool Program"), newLabel = "Afterschool")
@@ -78,7 +78,7 @@ plotcp(full_tree_girls)
 get_score(full_tree_girls, opps_tree_test)
 # That is a pretty high score. Almost too good to be true
 
-prp(full_tree_girls, type=1, extra=103, roundint = FALSE)
+prp(full_tree_girls, type=1, extra=102, roundint = FALSE)
 full_tree_girls$variable.importance
 
 # try the to built a different, pruned tree
@@ -89,15 +89,15 @@ prp(tree2, type = 1, extra = 103, roundint = FALSE)
 
 # Tree for Students with risk droping out of school ----
 full_tree_srdos <- rpart(formula = Att_SRDoS ~ ., data = opps_tree_train, cp= 0.05,  minsplit =2, method="class")
-prp(full_tree_srdos, type=1, extra=104, roundint = FALSE)
+prp(full_tree_srdos, type=2, extra=108, roundint = FALSE)
 full_tree_srdos$variable.importance
-# as with the Girls trees first split seems to be the boys_att, the student droping tree seems to think, that SwDis is most important. 
+# as with the Girls trees first split seems to be the boys_att, the student dropping tree seems to think, that SwDis is most important. 
 # In a next version, I will delete all Att_ attributes besides the one I am looking for:
 
 
 
 # tree function ----
-opps_tree_attgirls <- opps_tree[,c(-11,-12,-14,-15)]
+opps_tree_attgirls <- opps_tree[,c(-10,-11,-13,-14)]
 set.seed(28281)
 opps_tree_train_girls = opps_tree_attgirls[train_rows, ]
 opps_tree_test_girls = opps_tree_attgirls[-train_rows, ]
@@ -107,7 +107,7 @@ prp(full_tree_only_girls, type=1, extra=103, roundint = FALSE)
 full_tree_only_girls$variable.importance
 
 
-opps_tree_attsrdos <- opps_tree[,c(-11,-12,-13,-15)]
+opps_tree_attsrdos <- opps_tree[,c(-10,-11,-12,-14)]
 set.seed(28281)
 opps_tree_train_srdos = opps_tree_attsrdos[train_rows, ]
 opps_tree_test_girls = opps_tree_attsrdos[-train_rows, ]

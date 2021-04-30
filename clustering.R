@@ -42,19 +42,19 @@ saveRDS(sil, 'sil.rds')
 sil <- readRDS('sil.rds')
 
 # make nice plots
-sil_to_plot <- data.frame(index = seq(1:60), sil = sil)
+sil_to_plot <- data.frame(index = seq(1:40), sil = sil)
 
 ggplot(sil_to_plot, aes(x=index,y = sil)) +     # "#069680","#960664","#380696")
   geom_point(color = "#069680", size =3) +
   geom_line(color = "#D35612") +
-  geom_vline(xintercept = 7, linetype="dotted", color = "#380696", size=1) +
+  geom_vline(xintercept = 18, linetype="dotted", color = "#380696", size=1) +
   geom_text(aes(18,0.22,label = "k = 18", vjust = 3, hjust = 1.5))+
   labs(x = "Number of clusters", y = "Silhouette Width") +
   ylim(0.1,0.65) +
   theme_classic() +
   theme(axis.title = element_text(size = rel(1.8)))
 
-# there seems to be an endless improvement in the Silhouete, so I'll stop here and do not go further with gower
+# there seems to be an endless improvement in the Silhouette, so I'll stop here and do not go further with gower
 
 # Manhattan ----
 
@@ -83,12 +83,13 @@ sil_to_plot <- data.frame(index = seq(1:60), sil = sil)
 ggplot(sil_to_plot, aes(x=index,y = sil)) +     # "#069680","#960664","#380696")
   geom_point(color = "#069680", size =3) +
   geom_line(color = "#D35612") +
-  geom_vline(xintercept = 24, linetype="dotted", color = "#380696", size=1) +
+  geom_vline(xintercept = 18, linetype="dotted", color = "#380696", size=1) +
   geom_text(aes(18,0.22,label = "k = 18", vjust = 3, hjust = 1.5))+
   labs(x = "Number of clusters", y = "Silhouette Width") +
   ylim(0.1,0.65) +
   theme_classic() +
-  theme(axis.title = element_text(size = rel(1.8)))
+  theme(axis.title = element_text(size = rel(1.8))) +
+  ggtitle("Silhouette Coefficient","PAM clustering with gower matrix")
 
 
 # the plots of manhattan and gower doesn't seem to be very different. Out of curiosity I will cluster anyway....
@@ -96,7 +97,7 @@ ggplot(sil_to_plot, aes(x=index,y = sil)) +     # "#069680","#960664","#380696")
 
 # pick k = 24 as best value, but this is definitely arguable 
 
-pam_fit_1 <- pam(gower_mat_1, k = 24, diss = TRUE)
+pam_fit_1 <- pam(gower_mat_1, k = 18, diss = TRUE)
 
 summary(pam_fit_1)
 pam_fit_1$medoids
@@ -147,8 +148,11 @@ opps_cluster_grouped <- opps_with_cluster %>%
   group_by(cluster) %>% count(Att_Girls)
 
 View(opps_cluster_grouped)
-# I think this approach it is kind of pointless. With almost arbitrarily picked 24 clusters, there are a couple of opportunities, where att_girls
+# I think this approach it is kind of pointless. With almost arbitrarily picked 18 clusters, there are a couple of opportunities, where att_girls
 # is higher than not being present. 
+
+
+
 
 
 # last clustering attempt is going to be aglomerative hierarchical clustering: ----
@@ -166,7 +170,7 @@ opps_hier <- data.frame(opps_hier, predict(dummy, newdata = opps_hier)) %>% sele
 
 dummy <- dummyVars("~ typeOfOpportunity", data = opps_hier)
 opps_hier <- data.frame(opps_hier, predict(dummy, newdata = opps_hier)) %>% select(-typeOfOpportunity)
-opps_hier$scholarship <- as.integer(opps_hier$scholarship)
+#opps_hier$scholarship <- as.integer(opps_hier$scholarship)
 
 glimpse(opps_hier)
 
@@ -176,8 +180,8 @@ glimpse(opps_hier)
 # two approaches: one, everything as factor, run daisy with gower
 # second: everything as number run euclidian
 
-opps_hier_fct <- data.frame(lapply(opps_hier, as.factor)) %>% na.omit() %>% select(-scholarship)
-opps_hier_int <- data.frame(lapply(opps_hier, as.integer)) %>% na.omit() %>% select(-scholarship)
+opps_hier_fct <- data.frame(lapply(opps_hier, as.factor)) %>% na.omit() #%>% select(-scholarship)
+#opps_hier_int <- data.frame(lapply(opps_hier, as.integer)) %>% na.omit() # %>% select(-scholarship)
 # save all the data I have so far
 save(opps_total, opps_inspect, opps, opps_tree, opps_for_ohe,opps_cluster, opps_hier, opps_hier_fct, opps_hier_int,file = "data/opps.RData")
 
@@ -189,20 +193,23 @@ dist_int <- as.matrix(dist_int)
 
 aggl_fct <- agnes(dist_fct, method = "average")
 plot(aggl_fct,
-     main = "Agglomerative, fct, average linkages")
+     main = "Agglomerative, average linkages")
 
+
+# NOT DONE YET, installing dendextend library if time
+#aggl_fct <- color_branches(aggl_fct, h = 3)
 
 aggl_int <- agnes(dist_int, method = "average")
 plot(aggl_int,
      main = "Agglomerative, int , average linkages")
 
-aggl_fct <- agnes(dist_fct, method = "complete")
-plot(aggl_fct,
-     main = "Agglomerative, fct, complete linkages")
+#aggl_fct <- agnes(dist_fct, method = "complete")
+#plot(aggl_fct,
+#     main = "Agglomerative, fct, complete linkages")
 
-aggl_int <- agnes(dist_int, method = "complete")
-plot(aggl_int,
-     main = "Agglomerative, int , complete linkages")
+#aggl_int <- agnes(dist_int, method = "complete")
+#plot(aggl_int,
+#     main = "Agglomerative, int , complete linkages")
 
 h <- hclust(dist_fct, method="average")
 plot(h, hang=-0.1)
@@ -210,14 +217,45 @@ plot(h, hang=-0.1)
 clus6 <- cutree(aggl_int, 6)
 clus6
 
-opps_hier_int_clusters <- cbind(opps_hier_int, cluster = clus6)
-opps_hier_int_clusters_girls <- opps_hier_int_clusters %>% group_by(cluster) %>% count(Att_Girls)
-opps_hier_int_clusters_boys <- opps_hier_int_clusters %>% group_by(cluster) %>% count(Att_Boys)
-opps_hier_int_clusters_risk <- opps_hier_int_clusters %>% group_by(cluster) %>% count(Att_SRDoS)
 
-opps_hier_int_clusters_risk
-opps_hier_int_clusters_girls
-opps_hier_int_clusters_boys
+# bind clusters back to data
+opps_hier_fct_clusters <- cbind(opps_hier_fct, cluster = clus6)
+# get some counts on attention groups
+opps_hier_fct_clusters_girls <- opps_hier_fct_clusters %>% group_by(cluster) %>% count(Att_Girls)
+opps_hier_fct_clusters_boys <- opps_hier_fct_clusters %>% group_by(cluster) %>% count(Att_Boys)
+opps_hier_fct_clusters_risk <- opps_hier_fct_clusters %>% group_by(cluster) %>% count(Att_SRDoS)
+opps_hier_fct_clusters_soso <- opps_hier_fct_clusters %>% group_by(cluster) %>% count(cluster)
+
+# count/data check
+opps_hier_fct_clusters_risk
+opps_hier_fct_clusters_girls
+opps_hier_fct_clusters_boys
+opps_hier_fct_clusters_soso
+
+# preparing and plotting distrubution of cluster no 6
+cluster_no_6 <- opps_hier_fct_clusters %>% filter(cluster ==6) %>% select(-cluster)
+
+cluster_no_6 <- data.frame(lapply(cluster_no_6, as.character))
+cluster_no_6 <- data.frame(lapply(cluster_no_6, as.numeric))
+cluster_no_6 <- rbind(cluster_no_6, colSums(cluster_no_6))
+plot_cluster6 <- gather(cluster_no_6[263,], key=attributes, value=counts)
+
+glimpse(cluster_no_6)
+
+ggplot(plot_cluster6, aes(attributes, counts, fill=attributes)) +
+  geom_bar(stat = "identity") +
+  theme_classic() +
+  theme(legend.position = "none", axis.text.x = element_text(angle = 270)) +
+  ggtitle("Distribution of Attributes in Cluster No 6")
+
+# checking on the order of AoI in cluster 6
+o <- cluster_no_6[263,] %>% select(contains(c("AoI_"))) %>% order()
+t <- cluster_no_6[263,] %>% select(contains(c("AoI_")))
+t[o]
+
+
+
+
 
 # Playground ----
 

@@ -30,7 +30,7 @@ colnames(opps_trans)
 inspect(opps_trans[1:10])
 
 # check on a plot with a minsup of 0.5.
-itemFrequencyPlot(opps_trans, support=0.5, cex.names=0.8)
+itemFrequencyPlot(opps_trans, support=0.5, cex.names=0.7)
 # Result: most of the items in there are not interesting because the majority is the "not there"-0-value, which does not give any information. 
 
 # -> try sth: try to delete all columns ending in "=0":
@@ -48,7 +48,7 @@ inspect(head(opps_sets, n = 5, by = "support"))
 is.closed(opps_sets)
 # yes, all TRUE
 
-subset(opps_sets, subset=(items %in% "L_English=1"))
+(subset(opps_sets, subset=(items %in% "L_English=1")))
 
 # Mine Rules ----
 # crashes on a win10 16gb ram machine with no limit adjustment, runs on 32gb win10 machine
@@ -65,9 +65,10 @@ summary(opps_rules)
 inspect(head(opps_rules, n=10, by="support"))
 
 opps_max_rules<- subset(opps_rules, subset=is.maximal(opps_rules))
+summary(opps_max_rules)
 # safe some storage
 rm(opps_rules)
-
+inspect(head(opps_max_rules, n=10, by="support"))
 # adding Kulczynski as measure 
 quality(opps_max_rules) <- cbind(quality(opps_max_rules),
                                  kulc = interestMeasure(opps_max_rules, measure = "kulczynski",
@@ -90,13 +91,15 @@ inspect(head(subset(opps_max_rules, subset=(lhs %in% "Att_SRDoS=1" )),n=15,by="l
 inspect(head(subset(opps_max_rules, subset=(lhs %in% "Att_SRDoS=1" & !(rhs %in% "L_English=1"))),n=15, by="lift"))
 
 # it appears that SRDoS appears togehter with Girls more often than with boys
-inspect(head(subset(opps_max_rules, subset=(lhs %in% "Att_SRDoS=1" & !(lhs %in% c("Att_Girls=1")))),n=15,by="lift"))
+inspect(head(subset(opps_max_rules, subset=(lhs %in% "Att_SRDoS=1" & !(lhs %in% c("Att_Boys=1")))),n=15,by="lift"))
 
 # checking on girls, excluding boys on the rhs
-inspect(head(subset(opps_max_rules, subset=(lhs %in% "Att_Girls=1" & !(rhs %in% "Att_Boys=1"))),n=10))
+inspect(head(subset(opps_max_rules, subset=(lhs %in% "Att_Girls=1"&!(lhs %in% "Att_Boys=1")    & !(rhs %in% "Att_Boys=1"))),n=10))
 
 
-# creating an Areo of Interest vector 
+
+
+# creating an Area of Interest vector 
 aoi <- as.vector(unlist(ishot[248:267]))
 aoi
 # checking on girls, focusing the rhs on Area Of Interest:

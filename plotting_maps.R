@@ -50,7 +50,7 @@ ggstates <- ggplot() +
 ggstates + 
   geom_point(data= opps_inspect, aes(x = locationLongitude, y = locationLatitude), color = "red", size = 1) 
 
-# the other two outliers are Honululu and San Jose, but not removing them, just zooming in:
+# the other two outliers are Honolulu and San Jose, but not removing them, just zooming in:
 # Final US map:
 
 ggstates <- ggplot() + 
@@ -59,10 +59,12 @@ ggstates <- ggplot() +
   guides(fill=FALSE)  # do this to leave off the color legend
 ggstates + 
   geom_point(data= opps_inspect, aes(x = locationLongitude, y = locationLatitude), color = "red", size = 1) +
-  coord_fixed(xlim = c(-124, -69),  ylim = c(25, 49), ratio = 1.3)
+  coord_fixed(xlim = c(-124, -69),  ylim = c(25, 49), ratio = 1.3) +
+  labs(x = "Longitude", y = "Latitude") +
+  ggtitle("US Map with all opportunties")
 
 
-# possibility to zoom in on US mape
+# possibility to zoom in on US map
   ggstates + 
   geom_point(data= opps_inspect, aes(x = locationLongitude, y = locationLatitude), color = "red", size = 2,inherit.aes = FALSE) +
   coord_fixed(xlim = c(-83, -68),  ylim = c(33, 46), ratio = 1.3)
@@ -192,12 +194,14 @@ add_data_plot <- function(state, data, title){# state HAS to be lower case,  dat
     geom_polygon(data = nc_complete, aes(fill = numbers), color = "white") +
     geom_polygon(color = "black", fill = NA) +
     theme_bw() +
+    labs(fill = "Population") +
     ggtitle(str_to_title(state), title) 
   
   state_plot + scale_fill_gradientn(colours = rev(rainbow(7))) + 
     geom_point(data= opps_state, aes(x = locationLongitude, y = locationLatitude, size=Freq), color = "black",inherit.aes = FALSE) 
 }
 
+# change labs(fill=  to percentage in add_data_plot function 
 nc_pov <- read.csv("data/north_carolina_poverty.csv", colClasses=c("NULL", NA, NA))
 add_data_plot("north carolina", nc_pov,"By Poverty Rate")
 
@@ -208,6 +212,7 @@ add_data_plot("north carolina", nc_white, "By Non White Population")
 
 # it does not appear, that non-white people have that clear disadvantage as poor people have in terms of opportunity availability
 
+# change labs(fill=  to Population in add_data_plot function 
 nc_population <- read.csv("data/north_carolina_population.csv",colClasses=c("NULL", NA, NA))
 add_data_plot("north carolina", nc_population, "By Population")
 
