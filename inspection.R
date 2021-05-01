@@ -199,8 +199,8 @@ plot_opps_ages$Age_Groups <- as.factor(plot_opps_ages$Age_Groups)
 plot_opps_ages$Age_Groups <- factor(plot_opps_ages$Age_Groups,levels=c("Ages_All.Ages","Ages_Pre.K", "Ages_Elementary..K.3.","Ages_Elementary..4.6.","Ages_Middle.School","Ages_High.School","Ages_Post.Secondary"))
 
 
-ggplot(plot_opps_ages[-1,], aes(Age_Groups, counts, fill=Age_Groups)) +
-  geom_bar(stat="identity") +
+ggplot(plot_opps_ages[-1,], aes(Age_Groups, counts)) +
+  geom_bar(stat="identity", color= "yellow", fill ="red2") +
   theme_classic() +
   theme(legend.position = "none", axis.text.x = element_text(angle = 270)) +
   ggtitle("Distribution of Offerings by Age Group","Not Normalized")
