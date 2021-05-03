@@ -62,7 +62,7 @@ ggplot(opps_inspect, aes(x=duration_in_h_group, fill=duration_in_h_group)) +
   theme(axis.title = element_text(size = rel(1.8))) +
   labs(x = "Duration including not specified duration (NA)") +
   theme_classic() +
-  theme(legend.position = "none", axis.text.x = element_text(angle = 270)) +
+  theme(legend.position = "none", axis.text.x = element_text(angle = 270, size=18)) +
   ggtitle("Distribution of Duration")
 
 # -> Four to seven days is the most common duration, but a lot of duration times are not specified (NA)
@@ -82,7 +82,7 @@ date_table <- date_table %>% filter(duration_in_h_group =="four to seven days")
 ggplot(date_table, aes(x=fromDate, y = Freq, fill = Freq)) + 
   geom_bar(stat="identity", width= 0.4) +
   theme_classic() +
-  theme(legend.position = "none", axis.text.x = element_text(angle = 270)) +
+  theme(legend.position = "none", axis.text.x = element_text(angle = 270, size=16)) +
   ggtitle("When happens the most of 'four to seven days'")
 
 
@@ -102,7 +102,7 @@ date_table <- date_table %>% filter(duration_in_h_group =="under one day")
 ggplot(date_table, aes(x=fromDate, y = Freq, fill = Freq)) + 
   geom_bar(stat="identity", width= 0.4) +
   theme_classic() +
-  theme(legend.position = "none", axis.text.x = element_text(angle = 270)) +
+  theme(legend.position = "none", axis.text.x = element_text(angle = 270, size=16)) +
   ggtitle("When happens the most of 'under one day'")
 
 
@@ -144,7 +144,7 @@ ggplot(opps_inspect, aes(cost, fill = cost)) +
   theme(axis.title = element_text(size = rel(1.8))) +
   labs(x = "Cost intervals") +
   theme_classic() +
-  theme(legend.position = "none", axis.text.x = element_text(angle = 270))
+  theme(legend.position = "none", axis.text.x = element_text(angle = 270, size = 16))
 
 # see if costs and scholarship are somehow related
 
@@ -161,7 +161,7 @@ ggplot(cost_scholars, aes(cost, fill = cost, alpha = scholarship)) +
 ggplot(cost_scholars, aes(cost, fill = scholarship)) + 
   geom_bar() +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 270, size=12)) +
+  theme(axis.text.x = element_text(angle = 270, size=14)) +
   ggtitle("Cost for the opportunities over available scholarships")
 # as we can see, only the price range "$100 to $500" offers a lot of scholarships
 cost_scholars_nan <- na.omit(cost_scholars)
@@ -169,7 +169,7 @@ cost_scholars_nan <- na.omit(cost_scholars)
 ggplot(cost_scholars_nan, aes(cost, fill = duration_in_h_group)) + 
   geom_bar() +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 270, size=12)) +
+  theme(axis.text.x = element_text(angle = 270, size=14)) +
   ggtitle("Cost for the opportunities over the duration","(duration NaN's deleted)")
 # as we can see, only the price range "$100 to $500" offers a lot of scholarships
 
@@ -200,9 +200,9 @@ plot_opps_ages$Age_Groups <- factor(plot_opps_ages$Age_Groups,levels=c("Ages_All
 
 
 ggplot(plot_opps_ages[-1,], aes(Age_Groups, counts)) +
-  geom_bar(stat="identity", color= "yellow", fill ="red2") +
+  geom_bar(stat="identity", color= "black", fill ="#e60047", width = 0.35) +
   theme_classic() +
-  theme(legend.position = "none", axis.text.x = element_text(angle = 270)) +
+  theme(legend.position = "none", axis.text.x = element_text(angle = 270, size =14)) +
   ggtitle("Distribution of Offerings by Age Group","Not Normalized")
 
 
@@ -215,7 +215,7 @@ plot_opps_ages$norm <-  lapply(plot_opps_ages$counts,normalize_ages )
 ggplot(plot_opps_ages[-1,], aes(Age_Groups, norm, fill=Age_Groups)) +
   geom_bar(stat="identity") +
   theme_classic() +
-  theme(legend.position = "none", axis.text.x = element_text(angle = 270)) +
+  theme(legend.position = "none", axis.text.x = element_text(angle = 270, size = 14)) +
   ggtitle("Distribution of Offerings by Age Group","Normalized")
   
   
@@ -269,13 +269,13 @@ ages_enroll_long <- pivot_longer(ages_enrolls, cols=c("age_norm","enroll_norm"),
 
 # plot ages_groups and enrollments in one
 ggplot(ages_enroll_long, aes(Age_Groups, numbers, fill=Category)) +
-  geom_bar(position="dodge", stat="identity",colour="black") +
+  geom_bar(position="dodge", stat="identity") +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 270)) +
+  theme(axis.text.x = element_text(angle = 270, size=14)) +
   scale_fill_manual(labels = c("Opportunities", "Enrollments"),
-                    values=c("#e60047", "#e69f00"))+
+                    values=c("#e69f00", "#d6ebfb"))+
   labs(y = "Normalized Counts") +
-  ggtitle("Comparison of", "Opportunities offered by AgeGroups and Enrollments - Normalized")
+  ggtitle("Comparison", "of Opportunities offered by AgeGroups and Enrollments - Normalized")
 
 
 
@@ -323,7 +323,7 @@ plot_opps_att <- gather(opps_inspect_att[842,], key=audience, value=counts)
 ggplot(plot_opps_att, aes(audience, counts, fill=audience)) +
   geom_bar(stat = "identity") +
   theme_classic() +
-  theme(legend.position = "none", axis.text.x = element_text(angle = 270)) +
+  theme(legend.position = "none", axis.text.x = element_text(angle = 270, size=14)) +
   ggtitle("Distribution of desired audience")
 
 # This is interesting, it looks like boys and girls are equally likely, but the GTS do get way more attention than underrepresented like Students with risk droping out of school or with disabilities
@@ -342,7 +342,7 @@ plot_opps_aoi <- gather(opps_inspect_aoi[842,], key=areaofinterest, value=counts
 ggplot(plot_opps_aoi, aes(areaofinterest, counts, fill=areaofinterest)) +
   geom_bar(stat = "identity") +
   theme_classic() +
-  theme(legend.position = "none", axis.text=element_text(size=10), axis.text.x = element_text(angle = 270)) +
+  theme(legend.position = "none", axis.text=element_text(size=10), axis.text.x = element_text(angle = 270, size=12)) +
   labs(x = "Area of Interest") +
   ggtitle("Overview of Area of Interests")
 
@@ -361,12 +361,19 @@ opps_inspect$typeOfOpportunity <- factor(opps_inspect$typeOfOpportunity, levels 
                                          "Conference/Workshop", "Drop-in","Fair/Festival","Field Trip","In School", "Online Learning",
                                          "Other","Overnight","Stargazing","Summer"))
 
+ggplot(opps_inspect, aes(typeOfOpportunity, fill = duration_in_h_group)) +
+  geom_bar() +
+  theme_classic() +
+  theme(axis.text=element_text(size=10), axis.text.x = element_text(angle = 270,size=12)) +
+  labs(x = "Type of Opportunity") +
+  ggtitle("Type of Opportuntiy by Duration")
+
 ggplot(opps_inspect, aes(typeOfOpportunity, fill = cost)) +
   geom_bar() +
   theme_classic() +
-  theme(axis.text=element_text(size=10), axis.text.x = element_text(angle = 270)) +
+  theme(axis.text=element_text(size=10), axis.text.x = element_text(angle = 270,size=12)) +
   labs(x = "Type of Opportunity") +
-  ggtitle("Type of Opportuntiy")
+  ggtitle("Type of Opportuntiy by Cost")
 
 # try to find girls only
 
