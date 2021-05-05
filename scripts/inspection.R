@@ -62,7 +62,7 @@ ggplot(opps_inspect, aes(x=duration_in_h_group, fill=duration_in_h_group)) +
   theme(axis.title = element_text(size = rel(1.8))) +
   labs(x = "Duration including not specified duration (NA)") +
   theme_classic() +
-  theme(legend.position = "none", axis.text.x = element_text(angle = 270, size=18)) +
+  theme(legend.position = "none", axis.text.x = element_text(angle = 270, size=18), text = element_text(size=14)) +
   ggtitle("Distribution of Duration")
 
 # -> Four to seven days is the most common duration, but a lot of duration times are not specified (NA)
@@ -123,7 +123,7 @@ date_table <- as.data.frame(table(dates_sort))
 ggplot(date_table, aes(x=dates_sort, y = Freq, fill = Freq)) + 
   geom_bar(stat="identity", width= 0.4) +
   theme_classic() +
-  theme(legend.position = "none", axis.text.x = element_text(angle = 270)) +
+  theme(legend.position = "none", axis.text.x = element_text(angle = 90)) +
   ggtitle("When are there the most offerings")
 
 
@@ -161,7 +161,7 @@ ggplot(cost_scholars, aes(cost, fill = cost, alpha = scholarship)) +
 ggplot(cost_scholars, aes(cost, fill = scholarship)) + 
   geom_bar() +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 270, size=14)) +
+  theme(axis.text.x = element_text(angle = 270, size=14), text = element_text(size=16)) +
   ggtitle("Cost for the opportunities over available scholarships")
 # as we can see, only the price range "$100 to $500" offers a lot of scholarships
 cost_scholars_nan <- na.omit(cost_scholars)
@@ -169,7 +169,7 @@ cost_scholars_nan <- na.omit(cost_scholars)
 ggplot(cost_scholars_nan, aes(cost, fill = duration_in_h_group)) + 
   geom_bar() +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 270, size=14)) +
+  theme(axis.text.x = element_text(angle = 270, size=14), text = element_text(size=14)) +
   ggtitle("Cost for the opportunities over the duration","(duration NaN's deleted)")
 # as we can see, only the price range "$100 to $500" offers a lot of scholarships
 
@@ -364,14 +364,14 @@ opps_inspect$typeOfOpportunity <- factor(opps_inspect$typeOfOpportunity, levels 
 ggplot(opps_inspect, aes(typeOfOpportunity, fill = duration_in_h_group)) +
   geom_bar() +
   theme_classic() +
-  theme(axis.text=element_text(size=10), axis.text.x = element_text(angle = 270,size=12)) +
+  theme(axis.text=element_text(size=10), axis.text.x = element_text(angle = 270,size=12), text = element_text(size=14)) +
   labs(x = "Type of Opportunity") +
   ggtitle("Type of Opportuntiy by Duration")
 
 ggplot(opps_inspect, aes(typeOfOpportunity, fill = cost)) +
   geom_bar() +
   theme_classic() +
-  theme(axis.text=element_text(size=10), axis.text.x = element_text(angle = 270,size=12)) +
+  theme(axis.text=element_text(size=10), axis.text.x = element_text(angle = 270,size=12),text = element_text(size=14)) +
   labs(x = "Type of Opportunity") +
   ggtitle("Type of Opportuntiy by Cost")
 
